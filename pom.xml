@@ -117,8 +117,8 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <outputDirectory>C:/Users/giaco/Desktop/paper-server/plugins</outputDirectory>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+<!--                            <outputDirectory>C:/Users/giaco/Desktop/paper-server/plugins</outputDirectory>-->
                         </configuration>
                     </execution>
                 </executions>
