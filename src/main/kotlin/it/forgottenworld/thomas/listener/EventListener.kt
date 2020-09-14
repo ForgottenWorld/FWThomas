@@ -3,14 +3,11 @@ package it.forgottenworld.thomas.listener
 import it.forgottenworld.thomas.FWThomasPlugin
 import it.forgottenworld.thomas.state.RoadState
 import org.bukkit.block.BlockFace
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.metadata.FixedMetadataValue
-
-fun Player.getBlockBelow() = world.getBlockAt(location.blockX, location.blockY-1, location.blockZ)
 
 class EventListener: Listener {
 

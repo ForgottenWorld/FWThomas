@@ -1,19 +1,35 @@
 package it.forgottenworld.thomas.model
 
 import it.forgottenworld.thomas.FWThomasPlugin
-import org.bukkit.Bukkit.getServer
 import org.bukkit.Location
-import org.bukkit.Particle
-import org.bukkit.World
 import org.bukkit.block.Block
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.metadata.FixedMetadataValue
-import org.bukkit.util.BlockVector
 
 class Road(
-        val origin: Location,
-        val width: Int,
-        val depth: Int,
-        val speedBoost: Float) {
+        private val origin: Location,
+        private val width: Int,
+        private val depth: Int,
+        private val speedBoost: Double) {
+
+    companion object {
+        fun fromConfig(conf: ConfigurationSection) =
+                Road(
+                        conf.getLocation("origin")!!,
+                        conf.getInt("width"),
+                        conf.getInt("depth"),
+                        conf.getDouble("speedBoost")
+                )
+    }
+
+    fun toConfig(conf: ConfigurationSection) {
+        conf.run {
+            set("origin", origin)
+            set("width", width)
+            set("depth", depth)
+            set("speedBoost", speedBoost)
+        }
+    }
 
     private fun getAllBlocks() = mutableSetOf<Block>().also {
         for (i in 0 until width)
@@ -25,12 +41,10 @@ class Road(
         getAllBlocks().forEach {
             it.setMetadata(
                 "grantsChooChoo",
-                FixedMetadataValue(FWThomasPlugin.instance, speedBoost)
+                FixedMetadataValue(FWThomasPlugin.instance, speedBoost.toFloat())
             )
         }
     }
-
-    fun containsBlock(block: Block) = getAllBlocks().contains(block)
 
     fun doesInstersectOtherRoad(road: Road) = road.getAllBlocks().intersect(getAllBlocks()).isNotEmpty()
 }

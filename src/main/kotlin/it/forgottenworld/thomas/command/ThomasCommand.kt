@@ -44,7 +44,7 @@ class ThomasCommand: CommandExecutor {
                     true
                 }
                 "speed" -> {
-                    val speed = args[1].toFloatOrNull()
+                    val speed = args[1].toDoubleOrNull()
                     if (speed == null) {
                         sender.sendMessage("${ChatColor.RED}Please provide speed as a positive floating point number")
                     } else {
@@ -62,6 +62,11 @@ class ThomasCommand: CommandExecutor {
                         -4 -> "${ChatColor.RED}Speed is missing"
                         else -> ""
                     })
+                    true
+                }
+                "reload" -> {
+                    sender.sendMessage("Reloading from configuration....")
+                    RoadState.fromConfig()
                     true
                 }
                 else -> false

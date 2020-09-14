@@ -1,5 +1,5 @@
 name: FWThomas
-version: 0.0.1-SNAPSHOT
+version: 0.0.2-SNAPSHOT
 api-version: "1.16"
 description: SpigotMC plugin for making fast walking paths
 author: Shivs (OhMeMuffin)
@@ -7,7 +7,7 @@ main: it.forgottenworld.thomas.FWThomasPlugin
 commands:
   fwthomas:
     description: Access FWThomas functions.
-    usage: /thomas [ pos1 | pos2 | speed SPEED | make ]
+    usage: /thomas [ pos1 | pos2 | speed SPEED | make | reload ]
     aliases: [thomas]
 permissions:
   fwthomas:
