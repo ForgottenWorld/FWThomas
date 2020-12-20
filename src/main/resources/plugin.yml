@@ -1,15 +1,24 @@
 name: FWThomas
-version: 0.0.2-SNAPSHOT
+version: 0.0.3-SNAPSHOT
 api-version: "1.16"
-description: SpigotMC plugin for making fast walking paths
+description: SpigotMC plugin for increasing the maximum speed of minecarts
 author: Shivs (OhMeMuffin)
 main: it.forgottenworld.thomas.FWThomasPlugin
+depend:
+  - FWKotlinDeps
 commands:
-  fwthomas:
+  thomas:
     description: Access FWThomas functions.
-    usage: /thomas [ pos1 | pos2 | speed SPEED | make | reload ]
-    aliases: [thomas]
+    usage: /thomas (while looking at a dispenser within 5 blocks)
+    aliases: [ thomas ]
+  dethomas:
+    description: Access FWThomas functions.
+    usage: /unthomas (while looking at a dispenser within 5 blocks)
+    aliases: [ unthomas ]
 permissions:
-  fwthomas:
+  thomas:
     description: Allows the player to use /thomas
+    default: op
+  unthomas:
+    description: Allows the player to use /unthomas
     default: op

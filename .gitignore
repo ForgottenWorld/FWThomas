@@ -12,3 +12,6 @@ buildNumber.properties
 
 /.idea/
 /.idea/libraries/
+/FWThomas.iml
+/build/
+/.gradle/
