@@ -1,2 +1,2 @@
 # FWThomas
-SpigotMC plugin for making fast walking paths
+SpigotMC plugin for increasing the maximum speed of minecarts
