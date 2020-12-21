@@ -27,13 +27,13 @@ object ThomasManager {
 
     fun Dispenser.unthomasfy() = thomasDispensers.remove(location.getDispenserCoords())
 
-    fun Dispenser.spawnThomasCart() {
-        (blockData as? DispenserBlockData)
-            ?.let { block.getRelative(it.facing) }
-            ?.location
-            ?.let { it.world?.spawn(it.clone().add(Vector(0.5, 0.0, 0.5)), Minecart::class.java) }
-            ?.maxSpeed = Config.maxSpeed
-    }
+    fun Dispenser.spawnThomasCart(minecartClass: Class<out Minecart>) = (blockData as? DispenserBlockData)
+        ?.let { block.getRelative(it.facing) }
+        ?.location
+        ?.clone()
+        ?.add(Vector(0.5, 0.0, 0.5))
+        ?.let { it.world?.spawn(it, minecartClass) }
+        ?.setMaxSpeed(Config.maxSpeed) != null
 
     fun scheduleSerialization() {
         launch {

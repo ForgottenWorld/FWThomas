@@ -22,12 +22,12 @@ data class DispenserCoords(
 
         fun Location.getDispenserCoords() = world?.uid?.let { DispenserCoords(blockX, blockY, blockZ, it) }
 
-        fun ConfigurationSection.getDispenserCoords(key: String) = getConfigurationSection(key).run {
+        fun ConfigurationSection.getDispenserCoords(key: String) = getConfigurationSection(key)!!.let {
             DispenserCoords(
-                getInt("x"),
-                getInt("y"),
-                getInt("z"),
-                UUID.fromString(getString("uid"))
+                it.getInt("x"),
+                it.getInt("y"),
+                it.getInt("z"),
+                UUID.fromString(it.getString("uid"))
             )
         }
     }
