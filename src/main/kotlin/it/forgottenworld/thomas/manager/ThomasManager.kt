@@ -1,32 +1,67 @@
 package it.forgottenworld.thomas.manager
 
 import it.forgottenworld.thomas.config.Config
+import it.forgottenworld.thomas.model.DispenserCoords
+import it.forgottenworld.thomas.model.DispenserCoords.Companion.getDispenserCoords
+import it.forgottenworld.thomas.utils.launch
+import it.forgottenworld.thomas.utils.launchAsync
 import it.forgottenworld.thomas.utils.thomasPlugin
-import org.bukkit.NamespacedKey
+import kotlinx.coroutines.delay
+import org.bukkit.Bukkit
 import org.bukkit.block.Dispenser
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Minecart
-import org.bukkit.persistence.PersistentDataType
 import org.bukkit.util.Vector
+import java.io.File
 import org.bukkit.block.data.type.Dispenser as DispenserBlockData
 
 object ThomasManager {
 
-    private const val NSKEY_NAME = "FW_THOMAS"
+    private const val DISPENSERS_FILE_NAME = "dispensers.yml"
 
-    val Dispenser.isThomasfied get() = persistentDataContainer.has(NamespacedKey(thomasPlugin, NSKEY_NAME), PersistentDataType.INTEGER)
+    private val thomasDispensers = mutableSetOf<DispenserCoords>()
 
-    fun Dispenser.thomasfy() = persistentDataContainer.set(NamespacedKey(thomasPlugin, NSKEY_NAME), PersistentDataType.INTEGER, 1)
+    val Dispenser.isThomasfied get() = thomasDispensers.contains(location.getDispenserCoords())
 
-    fun Dispenser.unthomasfy() = persistentDataContainer.remove(NamespacedKey(thomasPlugin, NSKEY_NAME))
+    fun Dispenser.thomasfy() = location.getDispenserCoords()?.let { thomasDispensers.add(it) }
 
-    fun Dispenser.spawnThomasCart(vel: Vector) {
-        val blockData = blockData as? DispenserBlockData ?: return
-        val outputLocation = block.getRelative(blockData.facing)
-        outputLocation.location
-            .let { it.world?.spawn(it, Minecart::class.java) }
-            ?.run {
-                velocity = vel
-                maxSpeed = Config.maxSpeed
+    fun Dispenser.unthomasfy() = thomasDispensers.remove(location.getDispenserCoords())
+
+    fun Dispenser.spawnThomasCart() {
+        (blockData as? DispenserBlockData)
+            ?.let { block.getRelative(it.facing) }
+            ?.location
+            ?.let { it.world?.spawn(it.clone().add(Vector(0.5, 0.0, 0.5)), Minecart::class.java) }
+            ?.maxSpeed = Config.maxSpeed
+    }
+
+    fun scheduleSerialization() {
+        launch {
+            delay(Config.serializationInterval)
+            while(true) {
+                delay(Config.serializationInterval)
+                launchAsync { saveToYaml() }
             }
+        }
+    }
+
+    private fun saveToYaml() {
+        val file = File(thomasPlugin.dataFolder, DISPENSERS_FILE_NAME)
+        if (!file.exists() && !file.createNewFile())
+            Bukkit.getLogger().warning("Couldn't create dispensers file")
+        with (YamlConfiguration()) {
+            thomasDispensers.forEachIndexed { i,c -> c.toYaml(createSection("$i")) }
+            save(file)
+        }
+    }
+
+    fun loadFromYaml() {
+        val file = File(thomasPlugin.dataFolder, DISPENSERS_FILE_NAME)
+        if (!file.exists()) return
+        with (YamlConfiguration()) {
+            load(file)
+            thomasDispensers.clear()
+            thomasDispensers.addAll(getKeys(false).map { getDispenserCoords(it) })
+        }
     }
 }

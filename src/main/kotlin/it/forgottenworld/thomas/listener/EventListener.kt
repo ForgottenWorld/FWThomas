@@ -16,6 +16,7 @@ class EventListener: Listener {
         val dispenser = event.block.state as? Dispenser ?: return
         if (!dispenser.isThomasfied || event.item.type != Material.MINECART) return
         event.isCancelled = true
-        dispenser.spawnThomasCart(event.velocity)
+        dispenser.spawnThomasCart()
+        dispenser.inventory.removeItem(event.item)
     }
 }

@@ -7,10 +7,13 @@ plugins {
 repositories {
     mavenCentral()
     maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://jitpack.io")
 }
 
 dependencies {
+    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
     compileOnly("com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT")
+    compileOnly("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:0.0.6")
 }
 
 group = "it.forgottenworld"
