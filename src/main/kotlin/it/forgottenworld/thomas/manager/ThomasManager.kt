@@ -39,8 +39,8 @@ object ThomasManager {
         launch {
             delay(Config.serializationDelay)
             while(true) {
+                saveToYaml()
                 delay(Config.serializationInterval)
-                launchAsync { saveToYaml() }
             }
         }
     }
@@ -49,7 +49,6 @@ object ThomasManager {
         launch {
             delay(Config.cleanupDelay)
             while(true) {
-                delay(Config.cleanupInterval)
                 thomasDispensers.removeIf { coords ->
                     Bukkit
                         .getWorld(coords.worldId)
@@ -57,9 +56,11 @@ object ThomasManager {
                         ?.let { it.state !is Dispenser }
                         ?: true
                 }
+                delay(Config.cleanupInterval)
             }
         }
     }
+
 
     private fun saveToYaml() {
         val file = File(thomasPlugin.dataFolder, DISPENSERS_FILE_NAME)
@@ -67,7 +68,8 @@ object ThomasManager {
             Bukkit.getLogger().warning("Couldn't create dispensers file")
         with (YamlConfiguration()) {
             thomasDispensers.forEachIndexed { i,c -> c.toYaml(createSection("$i")) }
-            save(file)
+            @Suppress("BlockingMethodInNonBlockingContext")
+            launchAsync { save(file) }
         }
     }
 
