@@ -18,6 +18,7 @@ class FWThomasPlugin: JavaPlugin() {
 
         ThomasManager.loadFromYaml()
         ThomasManager.scheduleSerialization()
+        ThomasManager.scheduleCleanup()
     }
 
     override fun onDisable() {

@@ -37,10 +37,26 @@ object ThomasManager {
 
     fun scheduleSerialization() {
         launch {
-            delay(Config.serializationInterval)
+            delay(Config.serializationDelay)
             while(true) {
                 delay(Config.serializationInterval)
                 launchAsync { saveToYaml() }
+            }
+        }
+    }
+
+    fun scheduleCleanup() {
+        launch {
+            delay(Config.cleanupDelay)
+            while(true) {
+                delay(Config.cleanupInterval)
+                thomasDispensers.removeIf { coords ->
+                    Bukkit
+                        .getWorld(coords.worldId)
+                        ?.getBlockAt(coords.x, coords.y, coords.z)
+                        ?.let { it.state !is Dispenser }
+                        ?: true
+                }
             }
         }
     }
