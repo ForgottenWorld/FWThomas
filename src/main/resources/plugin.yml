@@ -1,5 +1,5 @@
 name: FWThomas
-version: 0.0.3-SNAPSHOT
+version: 0.0.4-SNAPSHOT
 api-version: "1.16"
 description: SpigotMC plugin for increasing the maximum speed of minecarts
 author: Shivs (OhMeMuffin)

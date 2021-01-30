@@ -1,13 +1,11 @@
 package it.forgottenworld.thomas.utils
 
-import it.forgottenworld.thomas.FWThomasPlugin
 import org.bukkit.Material
 import org.bukkit.block.Dispenser
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Minecart
 import org.bukkit.entity.Player
 import org.bukkit.entity.minecart.*
-import org.bukkit.plugin.java.JavaPlugin
 
 private val minecartTypes = setOf(
     EntityType.MINECART,
@@ -45,5 +43,3 @@ val Material.minecartEntityClass get() = when (this) {
     Material.HOPPER_MINECART -> HopperMinecart::class.java
     else -> null
 }
-
-val thomasPlugin get() = JavaPlugin.getPlugin(FWThomasPlugin::class.java)

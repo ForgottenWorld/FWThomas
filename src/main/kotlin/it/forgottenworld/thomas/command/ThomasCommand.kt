@@ -1,15 +1,17 @@
 package it.forgottenworld.thomas.command
 
-import it.forgottenworld.thomas.manager.ThomasManager.isThomasfied
-import it.forgottenworld.thomas.manager.ThomasManager.thomasfy
+import it.forgottenworld.thomas.manager.ThomasManager
 import it.forgottenworld.thomas.utils.Strings
 import it.forgottenworld.thomas.utils.targetDispenser
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.component.KoinComponent
 
-class ThomasCommand: CommandExecutor {
+@KoinApiExtension
+class ThomasCommand(private val thomasManager: ThomasManager): CommandExecutor, KoinComponent {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (sender !is Player) {
@@ -24,13 +26,15 @@ class ThomasCommand: CommandExecutor {
 
         val dispenser = sender.targetDispenser ?: return false
 
-        if (dispenser.isThomasfied) {
-            sender.sendMessage(Strings.DISPENSER_ALREADY_THOMASFIED)
-            return true
-        }
+        with(thomasManager) {
+            if (dispenser.isThomasfied) {
+                sender.sendMessage(Strings.DISPENSER_ALREADY_THOMASFIED)
+                return true
+            }
 
-        dispenser.thomasfy()
-        sender.sendMessage(Strings.DISPENSER_THOMASFIED)
+            dispenser.thomasfy()
+            sender.sendMessage(Strings.DISPENSER_THOMASFIED)
+        }
         return true
     }
 }
